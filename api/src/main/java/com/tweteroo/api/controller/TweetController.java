@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,14 +32,13 @@ public class TweetController {
     
 
     @GetMapping
-    public ResponseEntity<List<_Tweet>> listTweets(@PageableDefault(page = 0, size = 5) org.springframework.data.domain.Pageable pageable){
+    public ResponseEntity<Page<_Tweet>> listTweets(@PageableDefault(page = 0, size = 5) org.springframework.data.domain.Pageable pageable){
 
+        System.out.println(pageable.getPageNumber());
 
         Page<_Tweet> tweets = tweetService.listTweets(pageable); 
 
-        System.out.println(tweets.getContent());
-
-        return new ResponseEntity<List<_Tweet>>(tweets.getContent(), HttpStatusCode.valueOf(200));
+        return new ResponseEntity<Page<_Tweet>>(tweets, HttpStatusCode.valueOf(200));
 
 
     }
@@ -50,6 +50,13 @@ public class TweetController {
 
         return new ResponseEntity<String>("OK", HttpStatusCode.valueOf(201));
 
+    }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<List<_Tweet>> listUserTweets(@PathVariable String username){
+       List<_Tweet> userTweets = tweetService.listUserTweets(username);
+
+        return new ResponseEntity<List<_Tweet>>(userTweets, HttpStatusCode.valueOf(200));
     }
 
 }

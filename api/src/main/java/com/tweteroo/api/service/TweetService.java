@@ -1,6 +1,7 @@
 package com.tweteroo.api.service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,4 +45,11 @@ public class TweetService {
         
         tweetRepository.save(new _Tweet(dto, existingUser.get().getAvatar()));
     } 
+
+    public List<_Tweet> listUserTweets(String username){
+        
+        List<_Tweet> userTweets = tweetRepository.findAllByUsername(username);
+
+        return userTweets;
+    }
 }
